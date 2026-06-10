@@ -58,7 +58,7 @@ export function Navbar() {
               <img
                 src="/logo2.png"
                 alt="Nutzera"
-                className="h-8 w-auto md:h-10"
+                className="h-28 w-auto md:h-40"
               />
             </div>
           </motion.button>
