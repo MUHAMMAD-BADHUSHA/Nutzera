@@ -57,7 +57,7 @@ export function ProductJourney() {
             <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
               Our Process
             </span>
-            <h2 className="font-display text-4xl leading-tight md:text-5xl lg:text-6xl">
+            <h2 className="font-display text-3xl leading-tight md:text-5xl lg:text-6xl">
               From Farm to <span className="text-gradient">Bar</span>
             </h2>
             <p className="mt-4 text-lg text-text-muted">

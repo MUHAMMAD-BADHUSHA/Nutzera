@@ -181,7 +181,7 @@ function ProductDisplay() {
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
       >
         <motion.div
-          className="relative z-20 -mr-12 md:-mr-20"
+          className="relative z-20 -mr-8 md:-mr-20"
           initial={{ opacity: 0, x: 80, y: 40 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 1.2, delay: 4.3, ease: [0.25, 0.1, 0.25, 1] }}
@@ -194,7 +194,7 @@ function ProductDisplay() {
             <img
               src="/chocobar.png"
               alt="Dark Chocolate Nuts Bar"
-              className="h-auto w-[260px] drop-shadow-2xl md:w-[380px]"
+              className="h-auto w-[160px] drop-shadow-2xl md:w-[380px]"
               style={{ filter: 'drop-shadow(0 30px 60px rgba(11,61,46,0.3))' }}
             />
             <div className="pointer-events-none absolute -inset-10 bg-gradient-to-t from-transparent via-white/5 to-transparent opacity-30 blur-xl" />
@@ -202,7 +202,7 @@ function ProductDisplay() {
         </motion.div>
 
         <motion.div
-          className="relative z-10 -ml-12 mt-12 md:-ml-20 md:mt-20"
+          className="relative z-10 -ml-8 mt-8 md:-ml-20 md:mt-20"
           initial={{ opacity: 0, x: -80, y: 40 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 1.2, delay: 4.6, ease: [0.25, 0.1, 0.25, 1] }}
@@ -215,7 +215,7 @@ function ProductDisplay() {
             <img
               src="/datebar.png"
               alt="Dates & Nuts Energy Bar"
-              className="h-auto w-[240px] drop-shadow-2xl md:w-[350px]"
+              className="h-auto w-[140px] drop-shadow-2xl md:w-[350px]"
               style={{ filter: 'drop-shadow(0 30px 60px rgba(11,61,46,0.25))' }}
             />
           </motion.div>
@@ -250,7 +250,7 @@ function AnimatedScrollIndicator() {
 
 export function Hero() {
   return (
-    <section className="relative pt-36 w-full overflow-hidden bg-dark">
+    <section className="relative w-full overflow-hidden bg-dark md:pt-36 md:h-dvh md:pb-0">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_30%,rgba(91,191,106,0.12)_0%,transparent_50%),radial-gradient(ellipse_at_80%_70%,rgba(212,160,23,0.08)_0%,transparent_50%)]" />
 
       <motion.div
@@ -266,7 +266,7 @@ export function Hero() {
 
       <FloatingNuts />
 
-      <div className="relative z-20 mx-auto flex h-full max-w-7xl flex-col px-6 md:flex-row md:items-center md:px-10 lg:px-16">
+      <div className="relative z-20 mx-auto flex max-w-7xl flex-col px-6 md:h-full md:flex-row md:items-center md:px-10 lg:px-16">
         <div className="flex flex-1 flex-col justify-center pt-24 md:pt-0 md:pr-8 lg:pr-16">
           <motion.div
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium text-primary-accent backdrop-blur-sm w-fit"
@@ -280,7 +280,7 @@ export function Hero() {
 
           <div className="overflow-hidden">
             <motion.h1
-              className="font-display text-5xl leading-[1.05] text-white md:text-6xl lg:text-7xl xl:text-8xl"
+              className="font-display text-4xl leading-[1.05] text-white md:text-6xl lg:text-7xl xl:text-8xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 4.1, duration: 0.01 }}
@@ -343,6 +343,12 @@ export function Hero() {
         </div>
 
         <div className="flex-1 hidden md:flex md:items-center md:justify-center">
+          <ProductDisplay />
+        </div>
+      </div>
+
+      <div className="relative z-20 mx-auto max-w-7xl overflow-hidden px-6 md:hidden">
+        <div className="mt-6 flex justify-center">
           <ProductDisplay />
         </div>
       </div>

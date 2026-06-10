@@ -34,7 +34,7 @@ export function WhyChooseNutzera() {
             <span className="mb-4 inline-block rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-primary-accent backdrop-blur-sm">
               Why Choose Us
             </span>
-            <h2 className="font-display text-4xl leading-tight md:text-5xl lg:text-6xl">
+            <h2 className="font-display text-3xl leading-tight md:text-5xl lg:text-6xl">
               Why <span className="text-gradient-gold">Nutzera</span>
             </h2>
             <p className="mt-4 text-lg text-white/60">
@@ -104,7 +104,7 @@ export function WhyChooseNutzera() {
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                   whileHover={{ y: -4 }}
                 >
-                  <span className="font-display text-4xl font-bold text-primary-accent md:text-5xl">
+                  <span className="font-display text-3xl font-bold text-primary-accent md:text-5xl">
                     {stat.value}
                   </span>
                   <h4 className="mt-2 font-display text-lg font-bold text-white">{stat.label}</h4>

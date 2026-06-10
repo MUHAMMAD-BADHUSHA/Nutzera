@@ -47,7 +47,7 @@ export function BrandStory() {
               <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
                 Our Story
               </span>
-              <h2 className="font-display text-4xl leading-tight text-dark md:text-5xl lg:text-6xl">
+              <h2 className="font-display text-3xl leading-tight text-dark md:text-5xl lg:text-6xl">
                 A Simple Belief:{' '}
                 <span className="text-gradient">Real Food Should Taste Incredible</span>
               </h2>

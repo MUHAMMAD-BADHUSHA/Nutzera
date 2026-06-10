@@ -64,7 +64,7 @@ export function Testimonials() {
             <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
               Testimonials
             </span>
-            <h2 className="font-display text-4xl leading-tight md:text-5xl lg:text-6xl">
+            <h2 className="font-display text-3xl leading-tight md:text-5xl lg:text-6xl">
               What People{' '}
               <span className="text-gradient">Say</span>
             </h2>

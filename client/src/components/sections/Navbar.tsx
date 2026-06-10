@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { Menu, X } from 'lucide-react'
-import Image from 'next/image'
 
 const navLinks = [
   { label: 'Products', href: '#products' },
@@ -24,12 +23,29 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+      document.body.style.top = `-${window.scrollY}px`
+    } else {
+      const scrollY = parseInt(document.body.style.top || '0', 10) * -1
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+      document.body.style.top = ''
+      window.scrollTo(0, scrollY)
+    }
+  }, [mobileOpen])
+
   return (
     <motion.header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
+        'fixed top-0 left-0 right-0 z-[9998] transition-all duration-500',
+        mobileOpen && 'overflow-x-hidden',
         scrolled
-          ? 'bg-dark/80 backdrop-blur-xl shadow-lg shadow-black/10'
+          ? 'bg-dark/90 backdrop-blur-xl shadow-lg shadow-black/20'
           : 'bg-transparent'
       )}
       initial={{ y: -80 }}
@@ -37,90 +53,102 @@ export function Navbar() {
       transition={{ duration: 0.8, delay: 4.2, ease: [0.25, 0.1, 0.25, 1] }}
     >
       <nav className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-  {/* Logo */}
-  <motion.a
-    href="#"
-    className="flex items-center"
-    whileHover={{ scale: 1.02 }}
-  >
-    <div className="relative">
-  <Image
-    src="/logo2.png"
-    alt="Nutzera"
-    width={290}
-    height={250}
-    className="object-contain"
-  />
-</div>
-  </motion.a>
+        {/* Logo */}
+        <motion.a
+          href="#"
+          className="flex shrink-0 items-center"
+          whileHover={{ scale: 1.02 }}
+        >
+          <div className="relative">
+            <img
+              src="/logo2.png"
+              alt="Nutzera"
+              className="h-8 w-auto md:h-10"
+            />
+          </div>
+        </motion.a>
 
-  {/* Desktop Navigation */}
-  <div className="hidden items-center gap-8 md:flex">
-    {navLinks.map((link) => (
-      <motion.a
-        key={link.label}
-        href={link.href}
-        className="text-sm font-medium text-white/70 transition-colors hover:text-primary-accent"
-        whileHover={{ y: -1 }}
-      >
-        {link.label}
-      </motion.a>
-    ))}
+        {/* Desktop Navigation */}
+        <div className="hidden items-center gap-8 md:flex">
+          {navLinks.map((link) => (
+            <motion.a
+              key={link.label}
+              href={link.href}
+              className={cn(
+                'text-sm font-medium transition-colors',
+                scrolled ? 'text-white/80 hover:text-primary-accent' : 'text-white/80 hover:text-primary-accent'
+              )}
+              whileHover={{ y: -1 }}
+            >
+              {link.label}
+            </motion.a>
+          ))}
 
-    <motion.button
-      className="rounded-full bg-primary-accent px-6 py-2.5 text-sm font-semibold text-dark shadow-lg shadow-primary-accent/25 transition-colors hover:bg-primary-light"
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      Shop Soon
-    </motion.button>
-  </div>
+          <motion.button
+            className="rounded-full bg-primary-accent px-6 py-2.5 text-sm font-semibold text-dark shadow-lg shadow-primary-accent/25 transition-colors hover:bg-primary-light"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Shop Soon
+          </motion.button>
+        </div>
 
-  {/* Mobile Menu Button */}
-  <button
-    className="relative z-50 md:hidden"
-    onClick={() => setMobileOpen(!mobileOpen)}
-    aria-label="Toggle menu"
-  >
-    {mobileOpen ? (
-      <X className="h-6 w-6 text-white" />
-    ) : (
-      <Menu className="h-6 w-6 text-white" />
-    )}
-  </button>
-</nav>
+        {/* Mobile Menu Button */}
+        <button
+          className="relative z-[9999] md:hidden"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? (
+            <X className="h-6 w-6 text-white" />
+          ) : (
+            <Menu className="h-6 w-6 text-white" />
+          )}
+        </button>
+      </nav>
 
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-dark/95 backdrop-blur-xl md:hidden"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-[9999] flex w-screen h-dvh flex-col items-center justify-center gap-6 overflow-x-hidden overflow-y-auto bg-dark/95 backdrop-blur-xl md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            {navLinks.map((link, i) => (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                className="text-2xl font-medium text-white/70 transition-colors hover:text-primary-accent"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </motion.a>
-            ))}
-            <motion.button
-              className="mt-4 rounded-full bg-primary-accent px-8 py-3 text-lg font-semibold text-dark shadow-lg shadow-primary-accent/25"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            <button
+              className="fixed right-4 top-5 z-[10000] flex h-10 w-10 items-center justify-center rounded-full bg-white/10 backdrop-blur-sm md:hidden"
+              onClick={() => setMobileOpen(false)}
+              aria-label="Close menu"
             >
-              Shop Soon
-            </motion.button>
+              <X className="h-5 w-5 text-white" />
+            </button>
+
+            <div className="flex w-full max-w-full flex-col items-center gap-6 px-6">
+              {navLinks.map((link, i) => (
+                <motion.a
+                  key={link.label}
+                  href={link.href}
+                  className="w-full max-w-full truncate text-center text-xl font-medium text-white/70 transition-colors hover:text-primary-accent md:text-2xl"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+              <motion.button
+                className="mt-2 w-full max-w-full truncate rounded-full bg-primary-accent px-8 py-3 text-lg font-semibold text-dark shadow-lg shadow-primary-accent/25"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Shop Soon
+              </motion.button>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
