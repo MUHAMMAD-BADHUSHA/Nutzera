@@ -76,7 +76,7 @@ export function WhyChooseNutzera() {
           </div>
 
           <div className="lg:col-span-2">
-            <StaggerContainer className="grid grid-cols-2 gap-4">
+            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {highlights.map((h) => (
                 <StaggerItem key={h.label}>
                   <div className="rounded-2xl border border-primary/10 bg-gray-50 p-5 text-center">

@@ -72,8 +72,9 @@ export function StaggerContainer({
   const { ref, isVisible } = useScrollAnimation()
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref}>
       <motion.div
+        className={className}
         initial="hidden"
         animate={isVisible ? "visible" : "hidden"}
         variants={{
