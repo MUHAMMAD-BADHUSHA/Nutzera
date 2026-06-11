@@ -12,7 +12,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
     <>
       <LoadingScreen />
       <Navbar />
-      <main>{children}</main>
+      <main className="relative">{children}</main>
       <Footer />
     </>
   )

@@ -1,127 +1,101 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { ScrollAnimation } from '@/components/ScrollAnimation'
+import { ScrollAnimation, StaggerContainer, StaggerItem } from '@/components/ScrollAnimation'
 import { Check, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
-const comparisons = [
-  { feature: 'Natural Ingredients', nutzera: true, typical: false },
-  { feature: 'No Preservatives', nutzera: true, typical: false },
-  { feature: 'Real Nuts', nutzera: true, typical: false },
-  { feature: 'Real Dates', nutzera: true, typical: false },
-  { feature: 'Better Nutrition', nutzera: true, typical: false },
-  { feature: 'Premium Quality', nutzera: true, typical: false },
-  { feature: 'No Added Sugar', nutzera: true, typical: false },
-  { feature: 'Plant-Based Protein', nutzera: true, typical: false },
+const comparisonRows = [
+  { label: 'Natural Ingredients', nutzera: true, typical: false },
+  { label: 'No Preservatives', nutzera: true, typical: false },
+  { label: 'Real Nuts', nutzera: true, typical: false },
+  { label: 'Real Dates', nutzera: true, typical: false },
+  { label: 'Better Nutrition', nutzera: true, typical: false },
+  { label: 'Premium Quality', nutzera: true, typical: false },
+  { label: 'No Added Sugar', nutzera: true, typical: false },
+  { label: 'Plant-Based Protein', nutzera: true, typical: false },
 ]
 
-const stats = [
-  { value: '100%', label: 'Natural', description: 'Made from real ingredients' },
-  { value: '0', label: 'Artificial', description: 'No artificial additives' },
-  { value: '9g', label: 'Protein', description: 'Per serving' },
-  { value: '5g', label: 'Fiber', description: 'Per serving' },
+const highlights = [
+  { value: '100%', label: 'Natural', sub: 'Made from real ingredients' },
+  { value: '0', label: 'Artificial', sub: 'No artificial additives' },
+  { value: '9g', label: 'Protein', sub: 'Per serving' },
+  { value: '5g', label: 'Fiber', sub: 'Per serving' },
 ]
 
 export function WhyChooseNutzera() {
   return (
-    <section id="why-nutzera" className="relative overflow-hidden bg-dark py-24 text-white md:py-32">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_left,rgba(91,191,106,0.08),transparent_50%),radial-gradient(ellipse_at_right,rgba(212,160,23,0.05),transparent_50%)]" />
-
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
+    <section id="why-nutzera" className="relative overflow-hidden bg-white py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6">
         <ScrollAnimation>
-          <div className="mx-auto mb-16 max-w-2xl text-center">
-            <span className="mb-4 inline-block rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-primary-accent backdrop-blur-sm">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
               Why Choose Us
             </span>
             <h2 className="font-display text-3xl leading-tight md:text-5xl lg:text-6xl">
-              Why <span className="text-gradient-gold">Nutzera</span>
+              Why <span className="text-gradient">Nutzera</span>
             </h2>
-            <p className="mt-4 text-lg text-white/60">
+            <p className="mt-4 text-lg text-gray-500">
               Every bar is a promise of quality.
             </p>
           </div>
         </ScrollAnimation>
 
-        <div className="grid gap-12 lg:grid-cols-2">
-          <ScrollAnimation direction="left">
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm md:p-10">
-              <h3 className="mb-8 font-display text-2xl font-bold text-white">
-                Nutzera vs Typical Snacks
-              </h3>
+        <div className="mt-16 grid gap-12 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <ScrollAnimation>
+              <div className="overflow-hidden rounded-2xl border border-gray-200">
+                <div className="grid grid-cols-3 border-b border-gray-200 bg-gray-50 px-6 py-4 text-sm font-semibold text-dark">
+                  <div />
+                  <div className="text-center text-primary">Nutzera</div>
+                  <div className="text-center text-gray-400">Typical Snacks</div>
+                </div>
 
-              <div className="space-y-4">
-                {comparisons.map((item, i) => (
-                  <motion.div
-                    key={item.feature}
-                    className="flex items-center justify-between rounded-xl border border-white/5 bg-white/5 p-4"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: i * 0.05 }}
+                {comparisonRows.map((row) => (
+                  <div
+                    key={row.label}
+                    className="grid grid-cols-3 border-b border-gray-100 px-6 py-3.5 text-sm last:border-0"
                   >
-                    <span className="text-sm font-medium text-white/80">{item.feature}</span>
-                    <div className="flex gap-8">
-                      <div className={cn(
-                        'flex h-6 w-6 items-center justify-center rounded-full',
-                        item.nutzera ? 'bg-primary-accent/20 text-primary-accent' : 'bg-red-500/20 text-red-400'
-                      )}>
-                        {item.nutzera ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
-                      </div>
-                      <div className={cn(
-                        'flex h-6 w-6 items-center justify-center rounded-full',
-                        item.typical ? 'bg-primary-accent/20 text-primary-accent' : 'bg-red-500/20 text-red-400'
-                      )}>
-                        {item.typical ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
-                      </div>
+                    <span className="text-gray-700">{row.label}</span>
+                    <div className="flex justify-center">
+                      {row.nutzera ? (
+                        <Check className="h-4 w-4 text-primary" />
+                      ) : (
+                        <X className="h-4 w-4 text-red-400" />
+                      )}
                     </div>
-                  </motion.div>
+                    <div className="flex justify-center">
+                      {row.typical ? (
+                        <Check className="h-4 w-4 text-primary" />
+                      ) : (
+                        <X className="h-4 w-4 text-red-400" />
+                      )}
+                    </div>
+                  </div>
                 ))}
               </div>
+            </ScrollAnimation>
+          </div>
 
-              <div className="mt-6 flex items-center justify-center gap-8 text-xs text-white/40">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-primary-accent" />
-                  Nutzera
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-red-400" />
-                  Typical Snacks
-                </div>
-              </div>
-            </div>
-          </ScrollAnimation>
-
-          <ScrollAnimation direction="right">
-            <div className="grid grid-cols-2 gap-4">
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  className="group rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary-accent/30 hover:bg-white/10"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.1 }}
-                  whileHover={{ y: -4 }}
-                >
-                  <span className="font-display text-3xl font-bold text-primary-accent md:text-5xl">
-                    {stat.value}
-                  </span>
-                  <h4 className="mt-2 font-display text-lg font-bold text-white">{stat.label}</h4>
-                  <p className="mt-1 text-sm text-white/50">{stat.description}</p>
-                </motion.div>
+          <div className="lg:col-span-2">
+            <StaggerContainer className="grid grid-cols-2 gap-4">
+              {highlights.map((h) => (
+                <StaggerItem key={h.label}>
+                  <div className="rounded-2xl border border-primary/10 bg-gray-50 p-5 text-center">
+                    <span className="font-display text-3xl font-bold text-primary">{h.value}</span>
+                    <p className="mt-1 text-sm font-semibold text-dark">{h.label}</p>
+                    <p className="mt-0.5 text-xs text-gray-400">{h.sub}</p>
+                  </div>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
 
-            <motion.div
-              className="mt-4 rounded-3xl border border-gold/20 bg-gradient-to-br from-gold/10 to-transparent p-6 backdrop-blur-sm"
-              whileHover={{ scale: 1.02 }}
-            >
-              <p className="text-center text-sm text-white/70">
-                <span className="font-semibold text-gold">100% Natural</span> — No artificial ingredients, ever.
-              </p>
-            </motion.div>
-          </ScrollAnimation>
+            <ScrollAnimation delay={0.2}>
+              <div className="mt-4 rounded-2xl border border-primary/10 bg-gray-50 p-5 text-center">
+                <p className="text-sm text-gray-500">
+                  <span className="font-semibold text-primary">100% Natural</span> — No artificial ingredients, ever.
+                </p>
+              </div>
+            </ScrollAnimation>
+          </div>
         </div>
       </div>
     </section>

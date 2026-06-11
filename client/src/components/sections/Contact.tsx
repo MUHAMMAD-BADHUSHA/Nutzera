@@ -1,143 +1,128 @@
 'use client'
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { ScrollAnimation } from '@/components/ScrollAnimation'
-import { Mail, MapPin, Phone, Send } from 'lucide-react'
+import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
 
 export function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle form submission
-  }
-
   return (
-    <section id="contact" className="relative overflow-hidden bg-cream py-24 md:py-32">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(11,61,46,0.03),transparent_50%)]" />
+    <section id="contact" className="relative overflow-hidden bg-white py-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
+          <div>
+            <ScrollAnimation>
+              <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
+                Get in Touch
+              </span>
+              <h2 className="font-display text-3xl leading-tight text-dark md:text-5xl lg:text-6xl">
+                Let&apos;s{' '}
+                <span className="text-gradient">Connect</span>
+              </h2>
+            </ScrollAnimation>
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
-        <ScrollAnimation>
-          <div className="mb-16 text-center">
-            <span className="mb-4 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
-              Get in Touch
-            </span>
-            <h2 className="font-display text-3xl leading-tight md:text-5xl lg:text-6xl">
-              Let&apos;s <span className="text-gradient">Connect</span>
-            </h2>
-          </div>
-        </ScrollAnimation>
-
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          <ScrollAnimation direction="left">
-            <div className="flex flex-col justify-center">
-              <h3 className="font-display text-2xl font-bold text-dark md:text-3xl">
-                We&apos;d love to hear from you
-              </h3>
-              <p className="mt-4 text-text-muted">
-                Have questions about our products? Want to partner with us?
+            <ScrollAnimation delay={0.1}>
+              <p className="mt-4 text-lg text-gray-500">
+                We&apos;d love to hear from you. Have questions about our products? Want to partner with us?
                 Or just want to say hello? We&apos;re here for you.
               </p>
+            </ScrollAnimation>
 
-              <div className="mt-8 space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                    <Mail className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-dark">Email Us</p>
-                    <p className="text-sm text-text-muted">hello@nutzera.com</p>
-                  </div>
+            <div className="mt-10 space-y-4">
+              <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50 p-5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <Mail className="h-4 w-4 text-primary" />
                 </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                    <Phone className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-dark">Call Us</p>
-                    <p className="text-sm text-text-muted">+1 (555) 123-4567</p>
-                  </div>
+                <div>
+                  <p className="text-xs font-medium text-gray-400">Email Us</p>
+                  <p className="font-medium text-dark">hello@nutzera.com</p>
                 </div>
+              </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                    <MapPin className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-dark">Visit Us</p>
-                    <p className="text-sm text-text-muted">123 Health Street, Wellness City, WC 12345</p>
-                  </div>
+              <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50 p-5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <Phone className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-gray-400">Call Us</p>
+                  <p className="font-medium text-dark">+1 (555) 123-4567</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 rounded-xl border border-gray-200 bg-gray-50 p-5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                  <MapPin className="h-4 w-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-gray-400">Visit Us</p>
+                  <p className="font-medium text-dark">123 Health Street, Wellness City, WC 12345</p>
                 </div>
               </div>
             </div>
-          </ScrollAnimation>
+          </div>
 
-          <ScrollAnimation direction="right">
-            <form onSubmit={handleSubmit} className="glass rounded-3xl p-8">
-              <div className="grid gap-6 sm:grid-cols-2">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-dark">Name</label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full rounded-xl border border-dark/10 bg-white/50 px-4 py-3 text-sm text-dark placeholder:text-text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    placeholder="Your name"
-                  />
-                </div>
+          <div>
+            <ScrollAnimation direction="up" delay={0.15}>
+              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-8 md:p-10">
+                <form onSubmit={(e) => e.preventDefault()} className="space-y-5">
+                  <div className="grid gap-5 md:grid-cols-2">
+                    <div>
+                      <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-dark">
+                        Name
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        placeholder="Your name"
+                        className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-dark placeholder:text-gray-400 transition-colors focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/10"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-dark">
+                        Email
+                      </label>
+                      <input
+                        id="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-dark placeholder:text-gray-400 transition-colors focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/10"
+                      />
+                    </div>
+                  </div>
 
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-dark">Email</label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full rounded-xl border border-dark/10 bg-white/50 px-4 py-3 text-sm text-dark placeholder:text-text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    placeholder="your@email.com"
-                  />
-                </div>
+                  <div>
+                    <label htmlFor="subject" className="mb-1.5 block text-sm font-medium text-dark">
+                      Subject
+                    </label>
+                    <input
+                      id="subject"
+                      type="text"
+                      placeholder="How can we help?"
+                      className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-dark placeholder:text-gray-400 transition-colors focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/10"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-dark">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      rows={5}
+                      placeholder="Tell us what's on your mind..."
+                      className="w-full resize-none rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-dark placeholder:text-gray-400 transition-colors focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/10"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-white transition-all hover:bg-primary-dark"
+                  >
+                    Send Message
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </button>
+                </form>
               </div>
-
-              <div className="mt-6">
-                <label className="mb-2 block text-sm font-medium text-dark">Subject</label>
-                <input
-                  type="text"
-                  value={formData.subject}
-                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full rounded-xl border border-dark/10 bg-white/50 px-4 py-3 text-sm text-dark placeholder:text-text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  placeholder="How can we help?"
-                />
-              </div>
-
-              <div className="mt-6">
-                <label className="mb-2 block text-sm font-medium text-dark">Message</label>
-                <textarea
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  rows={4}
-                  className="w-full resize-none rounded-xl border border-dark/10 bg-white/50 px-4 py-3 text-sm text-dark placeholder:text-text-muted/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                  placeholder="Tell us more..."
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-colors hover:bg-primary-light"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Send className="h-4 w-4" />
-                Send Message
-              </motion.button>
-            </form>
-          </ScrollAnimation>
+            </ScrollAnimation>
+          </div>
         </div>
       </div>
     </section>

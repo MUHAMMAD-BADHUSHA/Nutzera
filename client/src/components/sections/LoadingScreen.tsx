@@ -7,7 +7,7 @@ export function LoadingScreen() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2500)
+    const timer = setTimeout(() => setIsLoading(false), 2000)
     return () => clearTimeout(timer)
   }, [])
 
@@ -15,19 +15,23 @@ export function LoadingScreen() {
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-dark"
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-white"
           exit={{ opacity: 0 }}
-          transition={{ duration: 3, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration: 0.6 }}
         >
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="max-h-[100vh] max-w-[100vw] w-auto h-auto object-cover md:max-h-screen md:w-ful"
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="text-center"
           >
-            <source src="/loadingVideo.mp4" type="video/mp4" />
-          </video>
+            <span className="text-3xl font-bold tracking-tight text-dark">NUTZERA</span>
+            <motion.div
+              className="mx-auto mt-3 h-0.5 w-0 rounded-full bg-primary"
+              animate={{ width: 80 }}
+              transition={{ duration: 1.2, ease: 'easeInOut' }}
+            />
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
