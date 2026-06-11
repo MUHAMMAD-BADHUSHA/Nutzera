@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 export function LoadingScreen() {
   const [isLoading, setIsLoading] = useState(true)
@@ -25,7 +26,8 @@ export function LoadingScreen() {
             transition={{ duration: 0.4 }}
             className="text-center"
           >
-            <span className="text-3xl font-bold tracking-tight text-dark">NUTZERA</span>
+            {/* <span className="text-3xl font-bold tracking-tight text-dark">NUTZERA</span> */}
+            <Image src="/logo.jpeg" alt="Logo" width={200} height={200} />
             <motion.div
               className="mx-auto mt-3 h-0.5 w-0 rounded-full bg-primary"
               animate={{ width: 80 }}
