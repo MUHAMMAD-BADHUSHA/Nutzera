@@ -23,6 +23,20 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const handleMobileLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    setIsOpen(false)
+
+    window.history.pushState(null, '', href)
+    const target = document.querySelector(href)
+    if (target) {
+      // Small delay lets the mobile menu finish collapsing before scrolling
+      setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 150)
+    }
+  }
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
@@ -34,8 +48,9 @@ export function Navbar() {
           <Image
             src="/logo2.png"
             alt="Nutzera"
-            width={100}
-            height={100}
+            width={180}
+            height={90}
+            className="h-12 w-auto"
             priority
           />
         </a>
@@ -88,7 +103,7 @@ export function Navbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => handleMobileLinkClick(e, link.href)}
                   className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary"
                 >
                   {link.label}
@@ -96,7 +111,7 @@ export function Navbar() {
               ))}
               <a
                 href="#products"
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => handleMobileLinkClick(e, '#products')}
                 className="mt-2 flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white"
               >
                 Shop Soon
