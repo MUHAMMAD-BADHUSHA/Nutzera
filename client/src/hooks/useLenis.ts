@@ -5,6 +5,10 @@ import Lenis from 'lenis'
 
 export function useLenis() {
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+      return
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -13,9 +17,7 @@ export function useLenis() {
       touchMultiplier: 1.5,
     })
 
-    if (typeof window !== 'undefined') {
-      ;(window as any).lenis = lenis
-    }
+    ;(window as unknown as Record<string, unknown>).lenis = lenis
 
     function raf(time: number) {
       lenis.raf(time)
@@ -25,9 +27,7 @@ export function useLenis() {
     requestAnimationFrame(raf)
 
     return () => {
-      if (typeof window !== 'undefined') {
-        ;(window as any).lenis = null
-      }
+      ;(window as unknown as Record<string, unknown>).lenis = null
       lenis.destroy()
     }
   }, [])
