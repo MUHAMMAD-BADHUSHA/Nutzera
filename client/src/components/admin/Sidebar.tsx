@@ -68,7 +68,7 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
     <>
       <button
         onClick={() => setMobileOpen(true)}
-        className="fixed top-4 left-4 z-50 lg:hidden bg-[#67e1c1] text-white p-2.5 rounded-xl shadow-lg"
+        className="fixed top-4 left-4 z-50 lg:hidden bg-[#032c20] text-white p-2.5 rounded-xl shadow-lg"
       >
         <Menu size={20} />
       </button>
