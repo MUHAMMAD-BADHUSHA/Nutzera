@@ -28,7 +28,7 @@ const DEMO_CREDENTIALS = {
 
 const DEMO_USER: AuthUser = {
   id: "1",
-  name: "Alex Morgan",
+  name: "Nutzera Admin",
   email: "admin@nutzera.com",
   role: "super_admin",
   avatar: "",

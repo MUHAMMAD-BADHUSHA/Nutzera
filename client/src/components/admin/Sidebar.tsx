@@ -27,6 +27,7 @@ import {
   Menu,
   X,
 } from "lucide-react"
+import Image from "next/image"
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
@@ -67,7 +68,7 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
     <>
       <button
         onClick={() => setMobileOpen(true)}
-        className="fixed top-4 left-4 z-50 lg:hidden bg-[#064E3B] text-white p-2.5 rounded-xl shadow-lg"
+        className="fixed top-4 left-4 z-50 lg:hidden bg-[#67e1c1] text-white p-2.5 rounded-xl shadow-lg"
       >
         <Menu size={20} />
       </button>
@@ -81,20 +82,34 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
 
       <aside
         className={cn(
-          "fixed top-0 left-0 z-50 h-screen flex flex-col bg-[#064E3B] transition-all duration-300",
+          "fixed top-0 left-0 z-50 h-screen flex flex-col bg-[#032c20] transition-all duration-300",
           collapsed ? "w-[72px]" : "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
-        <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
-          <Link href="/admin" className="flex items-center gap-3 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-[#10B981] flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold text-sm">N</span>
+        <div className="flex items-center justify-between h-16 border-b border-white/10">
+         <div className="flex flex-1 justify-center items-center">
+           <Link href="/admin" className="flex items-center gap-3 min-w-0">
+            {collapsed ? <div className="w-8 h-8 rounded-lg bg-[#10B981] flex items-center justify-center shrink-0">
+              <span className="text-white font-bold text-sm">
+                <Image src="/logo.jpeg" alt="Nutzera" width={100} height={100} className="rounded-lg"/>
+              </span>
             </div>
+              : <></>}
             {!collapsed && (
-              <span className="text-white font-semibold text-lg truncate">Nutzera</span>
+              // <span className="text-white font-semibold text-lg truncate">Nutzera</span>
+              <div className="flex items-center justify-center ">
+                <Image
+                  src="/logo2.png"
+                  alt="Nutzera"
+                  width={150}
+                  height={150}
+          
+                />
+              </div>
             )}
           </Link>
+         </div>
           <button
             onClick={() => { toggleCollapse(); if (mobileOpen) setMobileOpen(false) }}
             className="text-white/60 hover:text-white transition-colors hidden lg:block"

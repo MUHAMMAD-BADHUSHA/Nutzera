@@ -11,7 +11,7 @@ import type {
 } from "@/types/admin"
 
 export const adminUsers: AdminUser[] = [
-  { id: "1", name: "Alex Morgan", email: "alex@nutzera.com", avatar: "", role: "super_admin", status: "active", lastActive: "2 min ago", permissions: ["all"] },
+  { id: "1", name: "Nutzera Admin", email: "admin@nutzera.com", avatar: "", role: "super_admin", status: "active", lastActive: "2 min ago", permissions: ["all"] },
   { id: "2", name: "Sarah Chen", email: "sarah@nutzera.com", avatar: "", role: "admin", status: "active", lastActive: "15 min ago", permissions: ["products", "orders", "users"] },
   { id: "3", name: "Mike Johnson", email: "mike@nutzera.com", avatar: "", role: "manager", status: "active", lastActive: "1 hour ago", permissions: ["products", "orders"] },
   { id: "4", name: "Emily Davis", email: "emily@nutzera.com", avatar: "", role: "support", status: "active", lastActive: "3 hours ago", permissions: ["orders", "customers"] },
