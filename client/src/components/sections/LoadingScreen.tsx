@@ -16,7 +16,7 @@ export function LoadingScreen() {
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-white"
+          className="fixed inset-0 z-99999 flex items-center justify-center bg-white"
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
         >

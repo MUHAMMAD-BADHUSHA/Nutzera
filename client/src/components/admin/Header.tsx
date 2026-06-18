@@ -53,7 +53,7 @@ export function Header() {
               <p className="text-sm font-medium text-gray-900 leading-tight">{user?.name}</p>
               <p className="text-xs text-gray-500 capitalize">{user?.role?.replace("_", " ")}</p>
             </div>
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#10B981] to-[#064E3B] flex items-center justify-center text-white text-sm font-semibold shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-[#10B981] to-[#064E3B] flex items-center justify-center text-white text-sm font-semibold shadow-sm">
               {user?.name?.split(" ").map((n) => n[0]).join("")}
             </div>
           </div>

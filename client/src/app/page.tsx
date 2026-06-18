@@ -1,3 +1,4 @@
+import { LoadingScreen } from "@/components/sections/LoadingScreen"
 import { Hero } from "@/components/sections/Hero"
 import { BrandStory } from "@/components/sections/BrandStory"
 import { IngredientsShowcase } from "@/components/sections/IngredientsShowcase"
@@ -13,6 +14,7 @@ import { Contact } from "@/components/sections/Contact"
 export default function Home() {
   return (
     <>
+      <LoadingScreen />
       <Hero />
       <BrandStory />
       <IngredientsShowcase />
