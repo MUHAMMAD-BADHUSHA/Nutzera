@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import { connectDB } from './config/db';
 import authRoutes from './routes/auth.routes';
+import uploadRoutes from './modules/upload/upload.route';
+import productRoutes from './modules/product/product.route';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -28,7 +30,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
-
+app.use('/api/upload', uploadRoutes);
+app.use('/api/admin/products', productRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Server is running' });
