@@ -1,14 +1,14 @@
 "use client"
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react"
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
+import { api } from "./api"
 
 interface AuthUser {
   id: string
   name: string
   email: string
   role: string
-  avatar: string
 }
 
 interface AuthContextType {
@@ -17,51 +17,64 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void
   isAdmin: boolean
+  token: string | null
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const DEMO_CREDENTIALS = {
-  email: "admin@nutzera.com",
-  password: "admin123",
-}
-
-const DEMO_USER: AuthUser = {
-  id: "1",
-  name: "Nutzera Admin",
-  email: "admin@nutzera.com",
-  role: "super_admin",
-  avatar: "",
-}
-
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("admin_user")
-      return stored ? JSON.parse(stored) : null
-    }
-    return null
-  })
-  const [loading] = useState(false)
+  const [user, setUser] = useState<AuthUser | null>(null)
+  const [token, setToken] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
-  const login = useCallback(async (email: string, password: string) => {
-    if (email === DEMO_CREDENTIALS.email && password === DEMO_CREDENTIALS.password) {
-      localStorage.setItem("admin_user", JSON.stringify(DEMO_USER))
-      setUser(DEMO_USER)
-      return true
+  useEffect(() => {
+    const storedUser = localStorage.getItem("admin_user")
+    const storedToken = localStorage.getItem("admin_token")
+    if (storedUser && storedToken) {
+      setUser(JSON.parse(storedUser))
+      setToken(storedToken)
     }
-    return false
+    setLoading(false)
+  }, [])
+
+  const login = useCallback(async (email: string, password: string) => {
+    try {
+      const response = await api.post<{ user: AuthUser; token: string }>("/auth/login", {
+        email,
+        password,
+      })
+
+      const { user: userData, token: tokenData } = response
+
+      const userObj: AuthUser = {
+        id: userData.id,
+        name: userData.email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()),
+        email: userData.email,
+        role: userData.role,
+      }
+
+      localStorage.setItem("admin_user", JSON.stringify(userObj))
+      localStorage.setItem("admin_token", tokenData)
+      setUser(userObj)
+      setToken(tokenData)
+      return true
+    } catch (error) {
+      console.error("Login error:", error)
+      return false
+    }
   }, [])
 
   const logout = useCallback(() => {
     localStorage.removeItem("admin_user")
+    localStorage.removeItem("admin_token")
     setUser(null)
+    setToken(null)
     router.push("/admin/login")
   }, [router])
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, isAdmin: !!user }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, isAdmin: !!user, token }}>
       {children}
     </AuthContext.Provider>
   )

@@ -8,8 +8,8 @@ import { AuthProvider, useAuth } from "@/lib/auth-context"
 function LoginForm() {
   const { login } = useAuth()
   const router = useRouter()
-  const [email, setEmail] = useState("admin@nutzera.com")
-  const [password, setPassword] = useState("admin123")
+  const [email, setEmail] = useState("admin@nutzera.in")
+  const [password, setPassword] = useState("nutzera@123")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -103,8 +103,8 @@ function LoginForm() {
 
           <div className="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
             <p className="text-xs text-gray-500 font-medium mb-1">Demo Credentials</p>
-            <p className="text-xs text-gray-400">Email: admin@nutzera.com</p>
-            <p className="text-xs text-gray-400">Password: admin123</p>
+            <p className="text-xs text-gray-400">Email: admin@nutzera.in</p>
+            <p className="text-xs text-gray-400">Password: nutzera@123</p>
           </div>
         </div>
       </div>
