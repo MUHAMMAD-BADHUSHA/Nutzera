@@ -21,6 +21,10 @@ export const loginAdmin = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    // Record last login
+    admin.lastLogin = new Date();
+    await admin.save();
+
     const token = AuthService.generateToken(admin);
 
     const { password: _, ...adminWithoutPassword } = admin.toObject();

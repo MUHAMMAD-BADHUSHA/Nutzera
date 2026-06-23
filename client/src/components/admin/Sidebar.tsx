@@ -27,17 +27,35 @@ import {
   ChevronRight,
   Menu,
   X,
+  ChevronDown,
 } from "lucide-react"
 import Image from "next/image"
 
-const menuItems = [
+type MenuItem = {
+  icon: any
+  label: string
+  href: string
+  permission?: string
+}
+
+type MenuGroup = {
+  label: string
+  items: MenuItem[]
+}
+
+const menuConfig: (MenuItem | MenuGroup)[] = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin", permission: "dashboard.view" },
   { icon: ShoppingBag, label: "Products", href: "/admin/products", permission: "product.view" },
   { icon: Tags, label: "Categories", href: "/admin/categories", permission: "category.view" },
   { icon: Package, label: "Orders", href: "/admin/orders", permission: "order.view" },
-  { icon: Users, label: "Customers", href: "/admin/users", permission: "user.view" },
-  { icon: UserCog, label: "Users", href: "/admin/users?tab=admins", permission: "user.view" },
-  { icon: ShieldCheck, label: "Roles & Permissions", href: "/admin/roles", permission: "role.view" },
+  {
+    label: "User Management",
+    items: [
+      { icon: Users, label: "Customers", href: "/admin/customers", permission: "user.view" },
+      { icon: UserCog, label: "Admin Users", href: "/admin/admin-users", permission: "user.view" },
+      { icon: ShieldCheck, label: "Roles & Permissions", href: "/admin/roles", permission: "role.view" },
+    ],
+  },
   { icon: Boxes, label: "Inventory", href: "/admin/inventory" },
   { icon: Star, label: "Reviews", href: "/admin/reviews" },
   { icon: TicketPercent, label: "Coupons", href: "/admin/coupons" },
@@ -49,11 +67,16 @@ const menuItems = [
   { icon: Settings, label: "Settings", href: "/admin/settings", permission: "settings.view" },
 ]
 
+function isGroup(item: MenuItem | MenuGroup): item is MenuGroup {
+  return "items" in item
+}
+
 export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => void }) {
   const pathname = usePathname()
   const { logout, user } = useAuth()
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [expandedGroups, setExpandedGroups] = useState<string[]>(["User Management"])
 
   const toggleCollapse = () => {
     const next = !collapsed
@@ -61,20 +84,98 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
     onCollapse?.(next)
   }
 
-  const isActive = (href: string) => {
-    if (href === "/admin") return pathname === "/admin"
-    return pathname.startsWith(href)
+  const toggleGroup = (label: string) => {
+    setExpandedGroups((prev) =>
+      prev.includes(label) ? prev.filter((g) => g !== label) : [...prev, label]
+    )
   }
 
-  const filteredMenuItems = menuItems.filter((item) => {
-    if (!item.permission) return true;
-    if (!user) return false;
+  const isActive = (href: string) => {
+    if (href === "/admin") return pathname === "/admin"
+    // Strip query strings for comparison
+    const cleanPathname = pathname.split("?")[0]
+    const cleanHref = href.split("?")[0]
+    return cleanPathname === cleanHref || cleanPathname.startsWith(cleanHref + "/")
+  }
+
+  const hasPermission = (permission?: string) => {
+    if (!permission) return true
+    if (!user) return false
     return (
-      user.role === 'superadmin' ||
-      user.role === 'Super Admin' ||
-      user.permissions?.includes(item.permission)
-    );
-  });
+      user.role === "superadmin" ||
+      user.role === "Super Admin" ||
+      user.permissions?.includes(permission)
+    )
+  }
+
+  const renderItem = (item: MenuItem) => {
+    if (!hasPermission(item.permission)) return null
+    const active = isActive(item.href)
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={() => setMobileOpen(false)}
+        className={cn(
+          "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative",
+          active
+            ? "bg-[#10B981]/15 text-white shadow-[0_0_20px_-5px_rgba(16,185,129,0.3)]"
+            : "text-[#D1FAE5]/70 hover:bg-[#047857]/40 hover:text-white"
+        )}
+      >
+        {active && (
+          <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#10B981] rounded-r-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+        )}
+        <item.icon
+          size={20}
+          className={cn(
+            "flex-shrink-0 transition-transform duration-200",
+            active ? "text-[#10B981]" : "group-hover:scale-110"
+          )}
+        />
+        {!collapsed && <span className="truncate">{item.label}</span>}
+      </Link>
+    )
+  }
+
+  const renderGroup = (group: MenuGroup) => {
+    const visibleItems = group.items.filter((i) => hasPermission(i.permission))
+    if (visibleItems.length === 0) return null
+
+    const isExpanded = expandedGroups.includes(group.label)
+    const hasActiveChild = visibleItems.some((i) => isActive(i.href))
+
+    if (collapsed) {
+      return (
+        <div key={group.label} className="space-y-0.5">
+          {visibleItems.map(renderItem)}
+        </div>
+      )
+    }
+
+    return (
+      <div key={group.label}>
+        <button
+          onClick={() => toggleGroup(group.label)}
+          className={cn(
+            "w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold tracking-wider uppercase transition-colors",
+            hasActiveChild ? "text-[#10B981]" : "text-[#D1FAE5]/40 hover:text-[#D1FAE5]/70"
+          )}
+        >
+          <span>{group.label}</span>
+          <ChevronDown
+            size={14}
+            className={cn("transition-transform duration-200", isExpanded ? "rotate-180" : "")}
+          />
+        </button>
+        {isExpanded && (
+          <div className="mt-0.5 space-y-0.5 ml-2 pl-2 border-l border-white/10">
+            {visibleItems.map(renderItem)}
+          </div>
+        )}
+      </div>
+    )
+  }
 
   return (
     <>
@@ -96,32 +197,23 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
         className={cn(
           "fixed top-0 left-0 z-50 h-screen flex flex-col bg-[#032c20] transition-all duration-300",
           collapsed ? "w-[72px]" : "w-64",
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         <div className="flex items-center justify-between h-16 border-b border-white/10">
-         <div className="flex flex-1 justify-center items-center">
-           <Link href="/admin" className="flex items-center gap-3 min-w-0">
-            {collapsed ? <div className="w-8 h-8 rounded-lg bg-[#10B981] flex items-center justify-center shrink-0">
-              <span className="text-white font-bold text-sm">
-                <Image src="/logo.jpeg" alt="Nutzera" width={100} height={100} className="rounded-lg"/>
-              </span>
-            </div>
-              : <></>}
-            {!collapsed && (
-              // <span className="text-white font-semibold text-lg truncate">Nutzera</span>
-              <div className="flex items-center justify-center ">
-                <Image
-                  src="/logo2.png"
-                  alt="Nutzera"
-                  width={150}
-                  height={150}
-          
-                />
-              </div>
-            )}
-          </Link>
-         </div>
+          <div className="flex flex-1 justify-center items-center">
+            <Link href="/admin" className="flex items-center gap-3 min-w-0">
+              {collapsed ? (
+                <div className="w-8 h-8 rounded-lg bg-[#10B981] flex items-center justify-center shrink-0">
+                  <Image src="/logo.jpeg" alt="Nutzera" width={100} height={100} className="rounded-lg" />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <Image src="/logo2.png" alt="Nutzera" width={150} height={150} />
+                </div>
+              )}
+            </Link>
+          </div>
           <button
             onClick={() => { toggleCollapse(); if (mobileOpen) setMobileOpen(false) }}
             className="text-white/60 hover:text-white transition-colors hidden lg:block"
@@ -137,41 +229,13 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
         </div>
 
         <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 scrollbar-thin">
-          {filteredMenuItems.map((item) => {
-            const active = isActive(item.href)
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative",
-                  active
-                    ? "bg-[#10B981]/15 text-white shadow-[0_0_20px_-5px_rgba(16,185,129,0.3)]"
-                    : "text-[#D1FAE5]/70 hover:bg-[#047857]/40 hover:text-white",
-                )}
-              >
-                {active && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#10B981] rounded-r-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-                )}
-                <item.icon
-                  size={20}
-                  className={cn(
-                    "flex-shrink-0 transition-transform duration-200",
-                    active ? "text-[#10B981]" : "group-hover:scale-110",
-                  )}
-                />
-                {!collapsed && <span className="truncate">{item.label}</span>}
-              </Link>
-            )
-          })}
+          {menuConfig.map((item, idx) =>
+            isGroup(item) ? renderGroup(item) : renderItem(item as MenuItem)
+          )}
         </nav>
 
         <div className="border-t border-white/10 p-3">
-          <div className={cn(
-            "flex items-center gap-3 px-3 py-2.5 rounded-xl",
-            collapsed && "justify-center"
-          )}>
+          <div className={cn("flex items-center gap-3 px-3 py-2.5 rounded-xl", collapsed && "justify-center")}>
             {!collapsed && user && (
               <div className="flex-1 min-w-0">
                 <p className="text-white text-sm font-medium truncate">{user.name}</p>
