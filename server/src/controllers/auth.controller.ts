@@ -25,8 +25,20 @@ export const loginAdmin = async (req: Request, res: Response) => {
 
     const { password: _, ...adminWithoutPassword } = admin.toObject();
 
+    let permissions: string[] = [];
+    if (admin.role === 'superadmin' || admin.email === 'admin@nutzera.in') {
+      const { ALL_PERMISSIONS } = require('../services/auth.service');
+      permissions = ALL_PERMISSIONS;
+    } else if (admin.roleId) {
+      const roleObj: any = admin.roleId;
+      permissions = roleObj?.permissions || [];
+    }
+
     return res.json({
-      user: adminWithoutPassword,
+      user: {
+        ...adminWithoutPassword,
+        permissions
+      },
       token
     });
   } catch (error) {

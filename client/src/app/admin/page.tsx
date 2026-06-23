@@ -8,6 +8,8 @@ import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell,
 } from "recharts"
 
+import { PermissionGuard } from "@/components/admin/PermissionGuard"
+
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(value)
 
@@ -34,6 +36,14 @@ const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?:
 }
 
 export default function AdminDashboard() {
+  return (
+    <PermissionGuard permission="dashboard.view">
+      <DashboardContent />
+    </PermissionGuard>
+  )
+}
+
+function DashboardContent() {
   const statCards = [
     { label: "Total Revenue", value: formatCurrency(dashboardStats.totalRevenue), change: dashboardStats.revenueChange, icon: <DollarSign size={20} />, prefix: "" },
     { label: "Total Orders", value: dashboardStats.totalOrders.toLocaleString(), change: dashboardStats.ordersChange, icon: <ShoppingCart size={20} /> },

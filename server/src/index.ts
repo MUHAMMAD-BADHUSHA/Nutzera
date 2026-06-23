@@ -4,6 +4,8 @@ import { connectDB } from './config/db';
 import authRoutes from './routes/auth.routes';
 import uploadRoutes from './modules/upload/upload.route';
 import productRoutes from './modules/product/product.route';
+import roleRoutes from './routes/role.routes';
+import adminUserRoutes from './routes/admin.routes';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -32,6 +34,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/admin/products', productRoutes);
+app.use('/api/admin/roles', roleRoutes);
+app.use('/api/admin/users', adminUserRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Server is running' });

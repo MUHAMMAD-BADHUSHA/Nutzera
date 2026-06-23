@@ -28,9 +28,20 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useProducts, useDeleteProduct, useToggleProductStatus } from '@/hooks/useProducts';
 import { cn } from '@/lib/utils';
+import { PermissionGuard } from '@/components/admin/PermissionGuard';
+import { useAuth } from '@/lib/auth-context';
 
 export default function ProductsPage() {
+  return (
+    <PermissionGuard permission="product.view">
+      <ProductsContent />
+    </PermissionGuard>
+  );
+}
+
+function ProductsContent() {
   const router = useRouter();
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -38,6 +49,11 @@ export default function ProductsPage() {
   const { data, isLoading } = useProducts({ page, limit: 10, search });
   const deleteProduct = useDeleteProduct();
   const toggleStatus = useToggleProductStatus();
+
+  const isSuperAdmin = user?.role === 'superadmin' || user?.role === 'Super Admin';
+  const canCreate = isSuperAdmin || user?.permissions?.includes('product.create');
+  const canUpdate = isSuperAdmin || user?.permissions?.includes('product.update');
+  const canDelete = isSuperAdmin || user?.permissions?.includes('product.delete');
 
   const products = data?.data || [];
   const pagination = data?.pagination;
@@ -59,10 +75,12 @@ export default function ProductsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Products</h1>
           <p className="text-sm text-gray-500 mt-1">Manage your product catalog</p>
         </div>
-        <Button onClick={() => router.push('/admin/products/create')}>
-          <Plus size={18} className="mr-2" />
-          Add Product
-        </Button>
+        {canCreate && (
+          <Button onClick={() => router.push('/admin/products/create')}>
+            <Plus size={18} className="mr-2" />
+            Add Product
+          </Button>
+        )}
       </div>
 
       <Card>
@@ -157,19 +175,32 @@ export default function ProductsPage() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => router.push(`/admin/products/${product._id}/edit`)}>
-                                <Edit2 size={16} className="mr-2" />
-                                Edit
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleToggleStatus(product._id)}>
-                                {product.isActive ? <ToggleLeft size={16} className="mr-2" /> : <ToggleRight size={16} className="mr-2" />}
-                                {product.isActive ? 'Deactivate' : 'Activate'}
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem onClick={() => setDeleteId(product._id)} className="text-red-600">
-                                <Trash2 size={16} className="mr-2" />
-                                Delete
-                              </DropdownMenuItem>
+                              {canUpdate && (
+                                <>
+                                  <DropdownMenuItem onClick={() => router.push(`/admin/products/${product._id}/edit`)}>
+                                    <Edit2 size={16} className="mr-2" />
+                                    Edit
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => handleToggleStatus(product._id)}>
+                                    {product.isActive ? <ToggleLeft size={16} className="mr-2" /> : <ToggleRight size={16} className="mr-2" />}
+                                    {product.isActive ? 'Deactivate' : 'Activate'}
+                                  </DropdownMenuItem>
+                                </>
+                              )}
+                              {canDelete && (
+                                <>
+                                  {canUpdate && <DropdownMenuSeparator />}
+                                  <DropdownMenuItem onClick={() => setDeleteId(product._id)} className="text-red-600">
+                                    <Trash2 size={16} className="mr-2" />
+                                    Delete
+                                  </DropdownMenuItem>
+                                </>
+                              )}
+                              {!canUpdate && !canDelete && (
+                                <DropdownMenuItem disabled className="text-gray-400 italic">
+                                  No Actions Allowed
+                                </DropdownMenuItem>
+                              )}
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>

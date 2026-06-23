@@ -9,6 +9,7 @@ interface AuthUser {
   name: string
   email: string
   role: string
+  permissions?: string[]
 }
 
 interface AuthContextType {
@@ -40,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     try {
-      const response = await api.post<{ user: AuthUser; token: string }>("/api/auth/login", {
+      const response = await api.post<{ user: any; token: string }>("/api/auth/login", {
         email,
         password,
       })
@@ -48,10 +49,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { user: userData, token: tokenData } = response
 
       const userObj: AuthUser = {
-        id: userData.id,
+        id: userData.id || userData._id,
         name: userData.email.split("@")[0].replace(/[._]/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()),
         email: userData.email,
         role: userData.role,
+        permissions: userData.permissions || [],
       }
 
       localStorage.setItem("admin_user", JSON.stringify(userObj))

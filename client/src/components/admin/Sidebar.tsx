@@ -12,6 +12,7 @@ import {
   Package,
   Users,
   UserCog,
+  ShieldCheck,
   Boxes,
   Star,
   TicketPercent,
@@ -30,12 +31,13 @@ import {
 import Image from "next/image"
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
-  { icon: ShoppingBag, label: "Products", href: "/admin/products" },
-  { icon: Tags, label: "Categories", href: "/admin/categories" },
-  { icon: Package, label: "Orders", href: "/admin/orders" },
-  { icon: Users, label: "Customers", href: "/admin/users" },
-  { icon: UserCog, label: "Users", href: "/admin/users?tab=admins" },
+  { icon: LayoutDashboard, label: "Dashboard", href: "/admin", permission: "dashboard.view" },
+  { icon: ShoppingBag, label: "Products", href: "/admin/products", permission: "product.view" },
+  { icon: Tags, label: "Categories", href: "/admin/categories", permission: "category.view" },
+  { icon: Package, label: "Orders", href: "/admin/orders", permission: "order.view" },
+  { icon: Users, label: "Customers", href: "/admin/users", permission: "user.view" },
+  { icon: UserCog, label: "Users", href: "/admin/users?tab=admins", permission: "user.view" },
+  { icon: ShieldCheck, label: "Roles & Permissions", href: "/admin/roles", permission: "role.view" },
   { icon: Boxes, label: "Inventory", href: "/admin/inventory" },
   { icon: Star, label: "Reviews", href: "/admin/reviews" },
   { icon: TicketPercent, label: "Coupons", href: "/admin/coupons" },
@@ -44,7 +46,7 @@ const menuItems = [
   { icon: CreditCard, label: "Payments", href: "/admin/payments" },
   { icon: Truck, label: "Shipping", href: "/admin/shipping" },
   { icon: Bell, label: "Notifications", href: "/admin/notifications" },
-  { icon: Settings, label: "Settings", href: "/admin/settings" },
+  { icon: Settings, label: "Settings", href: "/admin/settings", permission: "settings.view" },
 ]
 
 export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => void }) {
@@ -63,6 +65,16 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
     if (href === "/admin") return pathname === "/admin"
     return pathname.startsWith(href)
   }
+
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (!item.permission) return true;
+    if (!user) return false;
+    return (
+      user.role === 'superadmin' ||
+      user.role === 'Super Admin' ||
+      user.permissions?.includes(item.permission)
+    );
+  });
 
   return (
     <>
@@ -125,7 +137,7 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
         </div>
 
         <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 scrollbar-thin">
-          {menuItems.map((item) => {
+          {filteredMenuItems.map((item) => {
             const active = isActive(item.href)
             return (
               <Link
