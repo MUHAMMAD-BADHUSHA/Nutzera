@@ -27,7 +27,7 @@ import {
   ChevronRight,
   Menu,
   X,
-  ChevronDown,
+
 } from "lucide-react"
 import Image from "next/image"
 
@@ -38,24 +38,14 @@ type MenuItem = {
   permission?: string
 }
 
-type MenuGroup = {
-  label: string
-  items: MenuItem[]
-}
-
-const menuConfig: (MenuItem | MenuGroup)[] = [
+const menuConfig: MenuItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin", permission: "dashboard.view" },
   { icon: ShoppingBag, label: "Products", href: "/admin/products", permission: "product.view" },
   { icon: Tags, label: "Categories", href: "/admin/categories", permission: "category.view" },
   { icon: Package, label: "Orders", href: "/admin/orders", permission: "order.view" },
-  {
-    label: "User Management",
-    items: [
-      { icon: Users, label: "Customers", href: "/admin/customers", permission: "user.view" },
-      { icon: UserCog, label: "Admin Users", href: "/admin/admin-users", permission: "user.view" },
-      { icon: ShieldCheck, label: "Roles & Permissions", href: "/admin/roles", permission: "role.view" },
-    ],
-  },
+  { icon: Users, label: "Customers", href: "/admin/customers", permission: "user.view" },
+  { icon: UserCog, label: "Admin Users", href: "/admin/admin-users", permission: "user.view" },
+  { icon: ShieldCheck, label: "Roles & Permissions", href: "/admin/roles", permission: "role.view" },
   { icon: Boxes, label: "Inventory", href: "/admin/inventory" },
   { icon: Star, label: "Reviews", href: "/admin/reviews" },
   { icon: TicketPercent, label: "Coupons", href: "/admin/coupons" },
@@ -67,16 +57,14 @@ const menuConfig: (MenuItem | MenuGroup)[] = [
   { icon: Settings, label: "Settings", href: "/admin/settings", permission: "settings.view" },
 ]
 
-function isGroup(item: MenuItem | MenuGroup): item is MenuGroup {
-  return "items" in item
-}
+
 
 export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => void }) {
   const pathname = usePathname()
   const { logout, user } = useAuth()
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [expandedGroups, setExpandedGroups] = useState<string[]>(["User Management"])
+
 
   const toggleCollapse = () => {
     const next = !collapsed
@@ -84,11 +72,7 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
     onCollapse?.(next)
   }
 
-  const toggleGroup = (label: string) => {
-    setExpandedGroups((prev) =>
-      prev.includes(label) ? prev.filter((g) => g !== label) : [...prev, label]
-    )
-  }
+
 
   const isActive = (href: string) => {
     if (href === "/admin") return pathname === "/admin"
@@ -138,44 +122,7 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
     )
   }
 
-  const renderGroup = (group: MenuGroup) => {
-    const visibleItems = group.items.filter((i) => hasPermission(i.permission))
-    if (visibleItems.length === 0) return null
 
-    const isExpanded = expandedGroups.includes(group.label)
-    const hasActiveChild = visibleItems.some((i) => isActive(i.href))
-
-    if (collapsed) {
-      return (
-        <div key={group.label} className="space-y-0.5">
-          {visibleItems.map(renderItem)}
-        </div>
-      )
-    }
-
-    return (
-      <div key={group.label}>
-        <button
-          onClick={() => toggleGroup(group.label)}
-          className={cn(
-            "w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold tracking-wider uppercase transition-colors",
-            hasActiveChild ? "text-[#10B981]" : "text-[#D1FAE5]/40 hover:text-[#D1FAE5]/70"
-          )}
-        >
-          <span>{group.label}</span>
-          <ChevronDown
-            size={14}
-            className={cn("transition-transform duration-200", isExpanded ? "rotate-180" : "")}
-          />
-        </button>
-        {isExpanded && (
-          <div className="mt-0.5 space-y-0.5 ml-2 pl-2 border-l border-white/10">
-            {visibleItems.map(renderItem)}
-          </div>
-        )}
-      </div>
-    )
-  }
 
   return (
     <>
@@ -229,9 +176,7 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
         </div>
 
         <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5 scrollbar-thin">
-          {menuConfig.map((item, idx) =>
-            isGroup(item) ? renderGroup(item) : renderItem(item as MenuItem)
-          )}
+          {menuConfig.map((item) => renderItem(item))}
         </nav>
 
         <div className="border-t border-white/10 p-3">
