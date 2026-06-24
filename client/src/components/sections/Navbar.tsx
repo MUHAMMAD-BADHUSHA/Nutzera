@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 
@@ -28,18 +29,22 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const handleMobileLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault()
-    setIsOpen(false)
-
-    window.history.pushState(null, '', href)
-    const target = document.querySelector(href)
-    if (target) {
-      // Small delay lets the mobile menu finish collapsing before scrolling
-      setTimeout(() => {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 150)
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
     }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  const closeMenu = () => setIsOpen(false)
+
+  const isActive = (href: string) => {
+    if (href.startsWith('/#')) return pathname === '/'
+    return pathname === href
   }
 
   return (
@@ -49,7 +54,7 @@ export function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10 lg:px-16">
-        <a href="/" className="relative z-10">
+        <Link href="/" className="relative z-10">
           <Image
             src="/logo2.png"
             alt="Nutzera"
@@ -58,11 +63,11 @@ export function Navbar() {
             className="h-12 w-auto"
             priority
           />
-        </a>
+        </Link>
 
         <div className="hidden items-center gap-8 md:flex">
           {links.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               className={`text-sm font-medium transition-colors ${
@@ -70,9 +75,9 @@ export function Navbar() {
               }`}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
-          <a
+          <Link
             href="#products"
             className={`rounded-full px-6 py-2.5 text-sm font-semibold transition-all ${
               isNavbarActive
@@ -81,7 +86,7 @@ export function Navbar() {
             }`}
           >
             Shop Soon
-          </a>
+          </Link>
         </div>
 
         <button
@@ -89,7 +94,8 @@ export function Navbar() {
           className={`relative z-10 md:hidden ${
             isNavbarActive ? 'text-dark' : 'text-white'
           }`}
-          aria-label="Toggle menu"
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isOpen}
         >
           {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -102,25 +108,32 @@ export function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden bg-white shadow-lg md:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation menu"
           >
             <div className="space-y-1 px-6 pb-6 pt-2">
               {links.map((link) => (
-                <a
+                <Link
                   key={link.href}
                   href={link.href}
-                  onClick={(e) => handleMobileLinkClick(e, link.href)}
-                  className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:text-primary"
+                  onClick={closeMenu}
+                  className={`block rounded-lg px-4 py-3 text-sm font-medium transition-colors hover:bg-gray-50 hover:text-primary ${
+                    isActive(link.href)
+                      ? 'bg-gray-50 text-primary'
+                      : 'text-gray-700'
+                  }`}
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
-              <a
+              <Link
                 href="#products"
-                onClick={(e) => handleMobileLinkClick(e, '#products')}
+                onClick={closeMenu}
                 className="mt-2 flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white"
               >
                 Shop Soon
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}
