@@ -13,6 +13,7 @@ import { Placeholder } from '@tiptap/extension-placeholder';
 import { Underline } from '@tiptap/extension-underline';
 import { TextAlign } from '@tiptap/extension-text-align';
 import { HorizontalRule } from '@tiptap/extension-horizontal-rule';
+import { Highlight } from '@tiptap/extension-highlight';
 import {
   Bold,
   Italic,
@@ -109,6 +110,7 @@ export function RichTextEditor({
       Placeholder.configure({ placeholder }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       HorizontalRule,
+      Highlight.configure({ multicolor: true }),
     ],
     content,
     editorProps: {
