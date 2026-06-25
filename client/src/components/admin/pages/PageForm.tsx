@@ -179,7 +179,7 @@ export function PageForm({ page, onSubmit, isLoading }: PageFormProps) {
           </CardHeader>
           <CardContent>
             <ImageUpload
-              value={bannerImage}
+              value={bannerImage || ''}
               onChange={(url) => setValue('bannerImage', url)}
             />
           </CardContent>
@@ -255,7 +255,7 @@ export function PageForm({ page, onSubmit, isLoading }: PageFormProps) {
             <div className="space-y-2">
               <Label>Open Graph Image</Label>
               <ImageUpload
-                value={ogImage}
+                value={ogImage || ''}
                 onChange={(url) => setValue('ogImage', url)}
               />
               <p className="text-[10px] text-gray-400">
