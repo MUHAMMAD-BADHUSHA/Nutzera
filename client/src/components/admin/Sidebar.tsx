@@ -27,6 +27,8 @@ import {
   ChevronRight,
   Menu,
   X,
+  FileSignature,
+  MessageSquare,
 
 } from "lucide-react"
 import Image from "next/image"
@@ -38,22 +40,18 @@ type MenuItem = {
   permission?: string
 }
 
-const menuConfig: MenuItem[] = [
+const menuConfig: (MenuItem | { type: 'divider'; label: string })[] = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin", permission: "dashboard.view" },
   { icon: ShoppingBag, label: "Products", href: "/admin/products", permission: "product.view" },
   { icon: Tags, label: "Categories", href: "/admin/categories", permission: "category.view" },
   { icon: Package, label: "Orders", href: "/admin/orders", permission: "order.view" },
   { icon: Users, label: "Customers", href: "/admin/customers", permission: "user.view" },
+  { type: "divider", label: "Content Management" },
+  { icon: FileSignature, label: "Pages", href: "/admin/pages", permission: "settings.view" },
+  { icon: MessageSquare, label: "Contact Messages", href: "/admin/contact-messages", permission: "settings.view" },
+  { type: "divider", label: "Administration" },
   { icon: UserCog, label: "Admin Users", href: "/admin/admin-users", permission: "user.view" },
   { icon: ShieldCheck, label: "Roles & Permissions", href: "/admin/roles", permission: "role.view" },
-  { icon: Boxes, label: "Inventory", href: "/admin/inventory" },
-  { icon: Star, label: "Reviews", href: "/admin/reviews" },
-  { icon: TicketPercent, label: "Coupons", href: "/admin/coupons" },
-  { icon: BarChart3, label: "Analytics", href: "/admin/analytics" },
-  { icon: FileText, label: "Reports", href: "/admin/reports" },
-  { icon: CreditCard, label: "Payments", href: "/admin/payments" },
-  { icon: Truck, label: "Shipping", href: "/admin/shipping" },
-  { icon: Bell, label: "Notifications", href: "/admin/notifications" },
   { icon: Settings, label: "Settings", href: "/admin/settings", permission: "settings.view" },
 ]
 
@@ -92,13 +90,25 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
     )
   }
 
-  const renderItem = (item: MenuItem) => {
-    if (!hasPermission(item.permission)) return null
-    const active = isActive(item.href)
+  const renderItem = (item: MenuItem | { type: 'divider'; label: string }) => {
+    if ('type' in item && item.type === 'divider') {
+      if (collapsed) return null;
+      return (
+        <div key={item.label} className="pt-4 pb-1 px-3">
+          <p className="text-[10px] font-semibold tracking-wider text-[#D1FAE5]/40 uppercase">
+            {item.label}
+          </p>
+        </div>
+      );
+    }
+
+    const menuItem = item as MenuItem;
+    if (!hasPermission(menuItem.permission)) return null;
+    const active = isActive(menuItem.href);
     return (
       <Link
-        key={item.href}
-        href={item.href}
+        key={menuItem.href}
+        href={menuItem.href}
         onClick={() => setMobileOpen(false)}
         className={cn(
           "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative",
@@ -110,16 +120,16 @@ export function Sidebar({ onCollapse }: { onCollapse?: (collapsed: boolean) => v
         {active && (
           <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#10B981] rounded-r-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
         )}
-        <item.icon
+        <menuItem.icon
           size={20}
           className={cn(
             "flex-shrink-0 transition-transform duration-200",
             active ? "text-[#10B981]" : "group-hover:scale-110"
           )}
         />
-        {!collapsed && <span className="truncate">{item.label}</span>}
+        {!collapsed && <span className="truncate">{menuItem.label}</span>}
       </Link>
-    )
+    );
   }
 
 

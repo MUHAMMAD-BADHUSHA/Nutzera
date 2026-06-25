@@ -9,10 +9,8 @@ import { usePathname } from 'next/navigation'
 
 const links = [
   { label: 'Products', href: '/products' },
-  { label: 'Ingredients', href: '/#ingredients' },
-  { label: 'Why Nutzera', href: '/#why-nutzera' },
-  { label: 'Our Story', href: '/#story' },
-  { label: 'Contact', href: '/#contact' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Contact', href: '/contact' },
 ]
 
 export function Navbar() {

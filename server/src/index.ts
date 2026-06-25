@@ -7,6 +7,8 @@ import productRoutes from './modules/product/product.route';
 import roleRoutes from './routes/role.routes';
 import adminUserRoutes from './routes/admin.routes';
 import adminUsersRoutes from './routes/adminusers.routes';
+import pageRoutes from './modules/page/page.route';
+import contactRoutes from './modules/contact/contact.route';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -38,6 +40,10 @@ app.use('/api/admin/products', productRoutes);
 app.use('/api/admin/roles', roleRoutes);
 app.use('/api/admin/users', adminUserRoutes);
 app.use('/api/admin/adminusers', adminUsersRoutes);
+app.use('/api/pages', pageRoutes);
+app.use('/api/admin/pages', pageRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/admin/contact-messages', contactRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Server is running' });

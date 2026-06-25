@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { ScrollAnimation } from '@/components/ScrollAnimation'
 
 export function Footer() {
@@ -29,28 +30,43 @@ export function Footer() {
             </ScrollAnimation>
           </div>
 
-          {[
-            { title: 'Products', links: ['Dates & Nuts Bar', 'Dark Chocolate Bar', 'All Products'] },
-            { title: 'Company', links: ['Our Story', 'Ingredients', 'Sustainability'] },
-            { title: 'Support', links: ['FAQ', 'Contact', 'Shipping Info'] },
-          ].map((col) => (
-            <div key={col.title}>
-              <ScrollAnimation direction="left" delay={0.1}>
-                <h4 className="mb-4 text-xs font-semibold tracking-widest text-gray-500 uppercase">
-                  {col.title}
-                </h4>
-                <ul className="space-y-2.5">
-                  {col.links.map((link) => (
-                    <li key={link}>
-                      <a href="#" className="text-sm text-gray-400 transition-colors hover:text-primary">
-                        {link}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </ScrollAnimation>
-            </div>
-          ))}
+          <div>
+            <ScrollAnimation direction="left" delay={0.1}>
+              <h4 className="mb-4 text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                Products
+              </h4>
+              <ul className="space-y-2.5">
+                <li><Link href="/products" className="text-sm text-gray-400 transition-colors hover:text-primary">All Products</Link></li>
+                <li><Link href="/products" className="text-sm text-gray-400 transition-colors hover:text-primary">Dates & Nuts Bar</Link></li>
+                <li><Link href="/products" className="text-sm text-gray-400 transition-colors hover:text-primary">Dark Chocolate Bar</Link></li>
+              </ul>
+            </ScrollAnimation>
+          </div>
+
+          <div>
+            <ScrollAnimation direction="left" delay={0.2}>
+              <h4 className="mb-4 text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                Company
+              </h4>
+              <ul className="space-y-2.5">
+                <li><Link href="/about" className="text-sm text-gray-400 transition-colors hover:text-primary">About Us</Link></li>
+                <li><Link href="/contact" className="text-sm text-gray-400 transition-colors hover:text-primary">Contact</Link></li>
+                <li><Link href="/products" className="text-sm text-gray-400 transition-colors hover:text-primary">Our Story</Link></li>
+              </ul>
+            </ScrollAnimation>
+          </div>
+
+          <div>
+            <ScrollAnimation direction="left" delay={0.3}>
+              <h4 className="mb-4 text-xs font-semibold tracking-widest text-gray-500 uppercase">
+                Legal
+              </h4>
+              <ul className="space-y-2.5">
+                <li><Link href="/privacy-policy" className="text-sm text-gray-400 transition-colors hover:text-primary">Privacy Policy</Link></li>
+                <li><Link href="/terms-and-conditions" className="text-sm text-gray-400 transition-colors hover:text-primary">Terms & Conditions</Link></li>
+              </ul>
+            </ScrollAnimation>
+          </div>
         </div>
 
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row">
